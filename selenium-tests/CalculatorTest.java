@@ -1,35 +1,42 @@
-import org.openqa.selenium.*;
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.testng.Assert;
-import org.testng.annotations.DataProvider;
+import org.testng.annotations.AfterClass;
+import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
 public class CalculatorTest {
+    WebDriver driver;
 
-    @DataProvider(name="testData")
-    public Object[][] data() {
-        return new Object[][] {
-            {2, 3, 5},  // ✅ PASS
-            {2, 3, 6}   // ❌ FAIL
-        };
+    @BeforeClass
+    public void setup() {
+        System.setProperty("webdriver.chrome.driver", "C:\\chromedriver.exe"); // ChromeDriver path
+        driver = new ChromeDriver();
+        driver.get("file:///C:/Users/LENOVO/Documents/Desktop/Calculator-app/index.html");
     }
 
-    @Test(dataProvider="testData")
-    public void calculatorTest(int a, int b, int expectedResult) {
-        WebDriver driver = new ChromeDriver();
-        driver.get("file:///C:/Users/LENOVO/Documents/Calculator-app/index.html");
+    @Test
+    public void testAddition() {
+        WebElement aField = driver.findElement(By.id("a"));
+        WebElement bField = driver.findElement(By.id("b"));
 
-        driver.findElement(By.id("a")).clear();
-        driver.findElement(By.id("a")).sendKeys(String.valueOf(a));
+        // Read manual values
+        int a = Integer.parseInt(aField.getAttribute("value"));
+        int b = Integer.parseInt(bField.getAttribute("value"));
 
-        driver.findElement(By.id("b")).clear();
-        driver.findElement(By.id("b")).sendKeys(String.valueOf(b));
+        WebElement button = driver.findElement(By.tagName("button"));
+        button.click();
 
-        driver.findElement(By.tagName("button")).click();
+        WebElement resultField = driver.findElement(By.id("result"));
+        int result = Integer.parseInt(resultField.getText().replace("Result: ", ""));
 
-        String result = driver.findElement(By.id("result")).getText();
-        Assert.assertEquals(result, String.valueOf(expectedResult));
+        Assert.assertEquals(result, a + b); // Automatic pass/fail
+    }
 
+    @AfterClass
+    public void teardown() {
         driver.quit();
     }
 }

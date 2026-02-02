@@ -1,9 +1,7 @@
 pipeline {
     agent any
 
-    triggers {
-        pollSCM('* * * * *') // Git push trigger
-    }
+    triggers { pollSCM('* * * * *') }
 
     stages {
         stage('Checkout') {
@@ -16,7 +14,7 @@ pipeline {
         stage('Run Selenium Tests') {
             steps {
                 dir('selenium-tests') {
-                    bat 'mvn test'  // Windows CMD, Linux use sh
+                    bat 'mvn test'
                 }
             }
         }
