@@ -12,7 +12,7 @@ public class CalculatorTest {
 
     @BeforeClass
     public void setup() {
-        System.setProperty("webdriver.chrome.driver", "C:\\chromedriver.exe"); // ChromeDriver path
+        System.setProperty("webdriver.chrome.driver", "C:\\chromedriver.exe"); // Path to ChromeDriver
         driver = new ChromeDriver();
         driver.get("file:///C:/Users/LENOVO/Documents/Desktop/Calculator-app/index.html");
     }
@@ -21,18 +21,14 @@ public class CalculatorTest {
     public void testAddition() {
         WebElement aField = driver.findElement(By.id("a"));
         WebElement bField = driver.findElement(By.id("b"));
-
-        // Read manual values
-        int a = Integer.parseInt(aField.getAttribute("value"));
-        int b = Integer.parseInt(bField.getAttribute("value"));
-
-        WebElement button = driver.findElement(By.tagName("button"));
-        button.click();
-
         WebElement resultField = driver.findElement(By.id("result"));
-        int result = Integer.parseInt(resultField.getText().replace("Result: ", ""));
 
-        Assert.assertEquals(result, a + b); // Automatic pass/fail
+        int a = Integer.parseInt(aField.getAttribute("value"));  // Read manual input
+        int b = Integer.parseInt(bField.getAttribute("value"));
+        int actualResult = Integer.parseInt(resultField.getText().replace("Result: ", ""));
+
+        int expectedResult = a + b; // Calculate expected
+        Assert.assertEquals(actualResult, expectedResult);      // Pass/Fail automatically
     }
 
     @AfterClass
