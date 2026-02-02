@@ -1,35 +1,29 @@
 pipeline {
-    agent any  // Jenkins lo ye node available unte automatic use chestundi
+    agent any
 
     triggers {
-        pollSCM('* * * * *')  // Git push ayithe automatic trigger avuthundi
+        pollSCM('* * * * *') // Git push trigger
     }
 
     stages {
-
         stage('Checkout') {
             steps {
-                // GitHub repo URL change cheyyandi ne repo URL ki
-                git 'https://github.com/Bhagyasree-05/Calculator.git'
+                git branch: 'main',
+                    url: 'https://github.com/Bhagyasree-05/selenium.git'
             }
         }
 
         stage('Run Selenium Tests') {
             steps {
                 dir('selenium-tests') {
-                    // Maven test run cheyadam
-                    sh 'mvn test'
+                    bat 'mvn test'  // Windows CMD, Linux use sh
                 }
             }
         }
     }
 
     post {
-        success {
-            echo '✅ All tests passed successfully!'
-        }
-        failure {
-            echo '❌ Some tests failed! Check console output.'
-        }
+        success { echo '✅ All tests passed!' }
+        failure { echo '❌ Some tests failed!' }
     }
 }
